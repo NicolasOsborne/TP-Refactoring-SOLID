@@ -28,9 +28,13 @@ En explorant et analysant le code existant, il est possible de mettre en éviden
 
 ```python
  def create_product
+
  def get_product
+
  def get_all_products
+
  def update_product
+
  def delete_product
 ```
 
@@ -42,6 +46,7 @@ if not name or not price or price <= 0:
 
 if not product:
    raise ValueError("Produit non trouvé.")
+
 if not name or not price or price <= 0:
    raise ValueError("Nom et prix sont requis, et le prix doit être positif.")
 ```
@@ -69,3 +74,15 @@ Si l'on souhaite changer une règle de validation, la manière dont les données
     Enfin, comme expliqué précédemment dans le deuxième point sur l'OCP, la classe de haut niveau `ProductService` dépend directement de la classe de bas niveau `ProductRepository`, au lieu de dépendre d'une abstraction via une interface, ce qui est une violation du principe DIP.
 
 ## Étape 2 : Application du Principe de Responsabilité Unique (SRP)
+
+Afin d'appliquer le Principe SRP, il est nécessaire de découper `ProductService` en classes distinctes, chacune avec sa propre responsabilité :
+
+- `ProductValidator` : Validation d'un produit
+- `ProductCreator` : Création d'un produit
+- `ProductRetriever` : Lecture d'un ou des produit(s)
+- `ProductUpdater` : Mise à jour d'un produit
+- `ProductDeleter` : Suppression d'un produit
+
+Chaque classe est séparée dans un fichier distinct pour bien séparer les responsabilités, et chaque classe a bien sa responsabilité unique.
+
+## Étape 3 : Application du Principe Ouvert/Fermé (OCP) et d'Inversion des Dépendances (DIP)
