@@ -1,9 +1,9 @@
 from typing import List, Optional
 from product_manager.models import Product
-from product_manager.repositories.repository import ProductRepository
+from product_manager.interfaces.product_repositories import IProductRepository
 
 class ProductRetriever:
-    def __init__(self, repository: ProductRepository):
+    def __init__(self, repository: IProductRepository):
         self.repository = repository
 
     def get_by_id(self, product_id: int) -> Optional[Product]:

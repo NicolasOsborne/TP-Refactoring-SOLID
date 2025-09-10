@@ -86,3 +86,11 @@ Afin d'appliquer le Principe SRP, il est nécessaire de découper `ProductServic
 Chaque classe est séparée dans un fichier distinct pour bien séparer les responsabilités, et chaque classe a bien sa responsabilité unique.
 
 ## Étape 3 : Application du Principe Ouvert/Fermé (OCP) et d'Inversion des Dépendances (DIP)
+
+L'objectif de cette étape est de découpler les nouvelles classes de services créées lors de l'étape précédente et l'implémentation du `ProductRepository`.
+Il faut pour cela créer une interface `IProductRepository` pour introduire une abstraction, afin que les classes de haut niveau (`ProductCreator`, `ProductRetriever`, `ProductUpdater`, `ProductDeleter`) ne dépendent plus directement du module de plus bas niveau `ProductRepository`, mais de cette nouvelle interface `IProductRepository` via l'injection de dépendances par constructeur.
+Ainsi, cette nouvelle implémentation permettra de respecter le principe d'Inversion des Dépendances DIP.
+
+Pour ce qui est du principe OCP, grâce à cette nouvelle abstraction, le code est désormais bien "Ouvert à l'extension, mais fermé à la modification".
+Désormais, si ce système devait venir à gérer des types de produits différents (par exemple `PhysicalProduct` et `DigitalProduct`), il n'est plus nécessaire de devoir modifier directement la classe d'origine `ProductService`, mais il suffirait de créer de nouvelles classes comme `PhysicalProductCreator` qui implémenterait une classe `PhysicalProductValidator` et `IProductRepository`.
+Ainsi, ajouter de nouvelles règles de validation, de nouveaux types de produits ou de nouvelles sources de données ne casserait pas l'OCP et permettraient au contraire d'effectivement garder un code "Ouvert à l'extension, mais fermé à la modification".

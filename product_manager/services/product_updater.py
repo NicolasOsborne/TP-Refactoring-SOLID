@@ -1,10 +1,9 @@
 from typing import Optional
 from product_manager.models import Product
-from product_manager.repositories.repository import ProductRepository
 from product_manager.validators.product_validator import ProductValidator
-
+from product_manager.interfaces.product_repositories import IProductRepository
 class ProductUpdater:
-    def __init__(self, repository: ProductRepository, validator: ProductValidator):
+    def __init__(self, repository: IProductRepository, validator: ProductValidator):
         self.repository = repository
         self.validator = validator
 

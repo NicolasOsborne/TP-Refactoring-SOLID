@@ -1,6 +1,8 @@
 from typing import List, Optional
+from product_manager.models import Product
+from product_manager.interfaces.product_repositories import IProductRepository
 
-class ProductRepository:
+class ProductRepository(IProductRepository):
     def __init__(self):
         self._products: dict[int, Product] = {}
         self._next_id = 1
