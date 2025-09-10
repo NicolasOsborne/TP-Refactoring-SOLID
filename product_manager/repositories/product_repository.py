@@ -1,5 +1,5 @@
 from typing import List, Optional
-from product_manager.models import Product
+from product_manager.models.product_model import Product
 from product_manager.interfaces.product_repositories import IProductRepository
 
 class ProductRepository(IProductRepository):

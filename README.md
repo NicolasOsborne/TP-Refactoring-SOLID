@@ -94,3 +94,45 @@ Ainsi, cette nouvelle implémentation permettra de respecter le principe d'Inver
 Pour ce qui est du principe OCP, grâce à cette nouvelle abstraction, le code est désormais bien "Ouvert à l'extension, mais fermé à la modification".
 Désormais, si ce système devait venir à gérer des types de produits différents (par exemple `PhysicalProduct` et `DigitalProduct`), il n'est plus nécessaire de devoir modifier directement la classe d'origine `ProductService`, mais il suffirait de créer de nouvelles classes comme `PhysicalProductCreator` qui implémenterait une classe `PhysicalProductValidator` et `IProductRepository`.
 Ainsi, ajouter de nouvelles règles de validation, de nouveaux types de produits ou de nouvelles sources de données ne casserait pas l'OCP et permettraient au contraire d'effectivement garder un code "Ouvert à l'extension, mais fermé à la modification".
+
+## Étape 4 : Application du Principe de Ségrégation des Interface (ISP) et de Substitution de Liskov (LSP)
+
+Après l'étape précédente et la création de l'interface `IProductRepository`, nous pouvons voir que celle-ci contient toutes les opérations CRUD :
+
+```python
+class IProductRepository(ABC):
+    @abstractmethod
+    def add(self, product: Product) -> Product:
+        pass
+
+    @abstractmethod
+    def get_by_id(self, product_id: int) -> Optional[Product]:
+        pass
+
+    @abstractmethod
+    def get_all(self) -> List[Product]:
+        pass
+
+    @abstractmethod
+    def update(self, product: Product) -> bool:
+        pass
+
+    @abstractmethod
+    def delete(self, product_id: int) -> bool:
+        pass
+```
+
+Or, chaque client de cette interface n'a généralement besoin que d'une seule (ou deux) de ces méthodes :
+
+- `ProductCreator` n'a besoin que de la méthode `add`
+- `ProductDeleter` n'a besoin que de la méthode `delete`
+- `ProductUpdater` n'a besoin que des méthodes `get_by_id` et `update`
+- `ProductRetriever` n'a besoin que des méthodes `get_by_id` et `get_all`
+
+Ainsi, l'interface `IProductRepository` peut être considérée comme "fat", et constituer une violation du principe ISP de Ségrégation des Interfaces.
+Nous pouvons donc la diviser en interfaces plus petites et plus spécifiques :
+
+- `IProductReader` (avec `get_by_id` et `get_all`)
+- `IProductWriter`
+
+Enfin, en ce qui concerne le principe de Substitution de Liskov LSP, nous n'avons pas introduit de hiérarchies de classes (différents types de validation de produits ou de types de produits). La seule hiérarchie introduite est celle de l'implémentation de l'interface `IProductRepository` par `ProductRepository`, et elle respecte bien le LSP.

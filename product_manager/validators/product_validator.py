@@ -1,4 +1,4 @@
-from product_manager.models import Product
+from product_manager.models.product_model import Product
 
 class ProductValidator:
     def validate(self, name: str, price: float):

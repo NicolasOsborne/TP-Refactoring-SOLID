@@ -1,9 +1,9 @@
-from product_manager.models import Product
+from product_manager.models.product_model import Product
 from product_manager.validators.product_validator import ProductValidator
-from product_manager.interfaces.product_repositories import IProductRepository
+from product_manager.interfaces.product_repositories import IProductWriter
 
 class ProductCreator:
-    def __init__(self, repository: IProductRepository, validator: ProductValidator):
+    def __init__(self, repository: IProductWriter, validator: ProductValidator):
         self.repository = repository
         self.validator = validator
 
