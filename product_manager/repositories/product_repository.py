@@ -30,3 +30,6 @@ class ProductRepository(IProductRepository):
             del self._products[product_id]
             return True
         return False
+    
+    def get_by_category(self, category: str) -> List[Product]:
+        return [p for p in self._products.values() if p.category == category]

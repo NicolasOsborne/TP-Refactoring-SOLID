@@ -136,3 +136,46 @@ Nous pouvons donc la diviser en interfaces plus petites et plus spécifiques :
 - `IProductWriter`
 
 Enfin, en ce qui concerne le principe de Substitution de Liskov LSP, nous n'avons pas introduit de hiérarchies de classes (différents types de validation de produits ou de types de produits). La seule hiérarchie introduite est celle de l'implémentation de l'interface `IProductRepository` par `ProductRepository`, et elle respecte bien le LSP.
+
+## Étape 5 : Implémentation d'une Nouvelle Fonctionnalité
+
+L'étape finale de ce TP est l'implémentation d'une fonctionnalité de recherche par catégorie.
+Voici les étapes à suivre pour réaliser cette implémentation :
+
+- Ajout d'une interface de recherche `find_by_category` dans `IProductReader` :
+
+```python
+@abstractmethod
+class IProductReader(ABC):
+   # ... #
+   def get_by_category(self, category: str) -> List[Product]:
+      pass
+```
+
+- Mettre à jour l'implémentation du `ProductRepository` avec `find_by_category` :
+
+```python
+class ProductRepository(IProductRepository):
+   # ... #
+   def get_by_category(self, category: str) -> List[Product]:
+     return [p for p in self._products.values() if p.category == category]
+```
+
+- Création du service de recherche par catégorie `product_searcher.py` :
+
+```python
+class ProductSearcher:
+ def __init__(self, reader: IProductReader):
+     self.reader = reader
+
+ def find_by_category(self, category: str) -> List[Product]:
+     return self.reader.get_by_category(category)
+```
+
+La nouvelle fonctionnalité est bien ajoutée, et respecte bien les principes SOLID :
+
+- **SRP :** La nouvelle fonctionnalité est bien séparée dans une classe dédiée `ProductSearcher`.
+- **OCP :** La nouvelle fonctionnalité a été ajoutée en étendant une interface existante `IProductReader` sans modifier les classes des services existantes (comme `ProductCreator` ou `ProductDeleter`).
+- **LSP :** Le `ProductRepository` respecte toujours le contrat de hiérarchie des classes.
+- **ISP :** La nouvelle méthode `get_by_category` est ajoutée à l'interface de "lecture" `IProductReader` afin de garder une certaine logique à la méthode, sans la rendre trop "fat".
+- **DIP :** La nouvelle fonctionnalité `ProductSearcher` dépend bien de l'abstraction `IProductReader`et non d'une implémentation directe de `ProductRepository`.

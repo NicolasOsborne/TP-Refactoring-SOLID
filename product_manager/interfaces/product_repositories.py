@@ -10,6 +10,10 @@ class IProductReader(ABC):
     def get_all(self) -> List[Product]:
         pass
 
+    @abstractmethod
+    def get_by_category(self, category: str) -> List[Product]:
+        pass
+
 class IProductWriter(ABC):
     @abstractmethod
     def add(self, product: Product) -> Product:
